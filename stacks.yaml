@@ -106,11 +106,11 @@ jobs:
   plan:
   - aggregate:
     - get: version
-      passed: build-rootfs
+      passed: [build-rootfs]
       params:
         bump: final
     - get: opensuse-cf-stack-rootfs-release-version
-      passed: build-rootfs
+      passed: [build-rootfs]
       params:
         bump: final
   - do:
