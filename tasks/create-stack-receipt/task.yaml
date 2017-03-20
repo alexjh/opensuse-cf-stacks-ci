@@ -8,6 +8,7 @@ image_resource:
 
 inputs:
 - name: opensuse-cf-stacks-ci
+- name: opensuse-cf-stacks-latest-image
 - name: version
 - name: stack-artifacts
 
