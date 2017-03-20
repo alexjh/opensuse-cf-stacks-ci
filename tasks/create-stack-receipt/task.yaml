@@ -2,11 +2,11 @@
 platform: linux
 
 inputs:
-- name: openstack-cf-stacks-ci
+- name: opensuse-cf-stacks-ci
 - name: version
 
 outputs:
 - name: stack-artifacts
 
 run:
-  path: openstack-cf-stacks-ci/tasks/create-stack-receipt/task.sh
+  path: opensuse-cf-stacks-ci/tasks/create-stack-receipt/task.sh
