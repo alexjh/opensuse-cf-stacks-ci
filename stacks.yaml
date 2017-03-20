@@ -97,4 +97,4 @@ jobs:
       params: {file: opensuse-cf-stack-rootfs-release-version/number}
     - put: opensuse-cf-stacks-s3
       params:
-        file: stack-artifacts/opensuse-cf-stack-*.tar.gz
+        file: versioned-rootfs/opensuse-cf-stack-*.tar.gz
