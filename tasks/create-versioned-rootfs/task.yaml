@@ -13,7 +13,7 @@ inputs:
 - name: stack-artifacts
 
 outputs:
-- name: stack-artifacts
+- name: versioned-rootfs
 
 run:
   path: opensuse-cf-stacks-ci/tasks/create-versioned-rootfs/task.sh

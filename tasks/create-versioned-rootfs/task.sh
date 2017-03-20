@@ -6,7 +6,7 @@ set -o pipefail
 
 set -x
 
-mkdir -p stack-artifacts
-rootfs_filename="stack-artifacts/opensuse-cf-stack-$(cat version/number).tar"
+mkdir -p versioned-rootfs
+rootfs_filename="versioned-rootfs/opensuse-cf-stack-$(cat version/number).tar"
 cp opensuse-cf-stacks-latest-image/rootfs.tar "${rootfs_filename}"
 gzip "${rootfs_filename}"
