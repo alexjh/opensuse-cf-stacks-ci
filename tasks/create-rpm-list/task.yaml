@@ -8,4 +8,4 @@ outputs:
 - name: stack-artifacts
 
 run:
-  path: opensuse-cf-stacks-ci/tasks/create-stack-receipt/task.sh
+  path: opensuse-cf-stacks-ci/tasks/create-rpm-list/task.sh
