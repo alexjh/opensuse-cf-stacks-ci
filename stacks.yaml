@@ -92,9 +92,31 @@ jobs:
       params:
         file: receipt-artifacts/opensuse-cf-stack_receipt-*
     - put: version
-      params: {file: version/number}
+      params:
+        file: version/number
     - put: opensuse-cf-stack-rootfs-release-version
-      params: {file: opensuse-cf-stack-rootfs-release-version/number}
+      params:
+        file: opensuse-cf-stack-rootfs-release-version/number
     - put: opensuse-cf-stacks-s3
       params:
         file: versioned-rootfs/opensuse-cf-stack-*.tar.gz
+
+- name: increment-release
+  serial: true
+  plan:
+  - aggregate:
+    - get: version
+      passed: build-rootfs
+      params:
+        bump: final
+    - get: opensuse-cf-stack-rootfs-release-version
+      passed: build-rootfs
+      params:
+        bump: final
+  - do:
+    - put: version
+      params:
+        file: version/number
+    - put: opensuse-cf-stack-rootfs-release-version
+      params:
+        file: opensuse-cf-stack-rootfs-release-version/number
