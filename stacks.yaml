@@ -1,0 +1,98 @@
+---
+resources:
+
+# Git Repos:
+- name: opensuse-cf-stacks-ci
+  type: git
+  source:
+    uri: {{opensuse-cf-stacks-ci-git-url}}
+- name: opensuse-cf-stacks
+  type: git
+  source:
+    uri: {{opensuse-cf-stacks-git-url}}
+
+# S3 Buckets:
+- name: opensuse-cf-stacks-s3
+  type: s3
+  source:
+    bucket: {{opensuse-cf-stacks-s3-bucket}}
+    regexp: rootfs/opensuse-cf-stack-(.*).tar.gz
+    access_key_id: {{opensuse-cf-stacks-s3-access-key}}
+    secret_access_key: {{opensuse-cf-stacks-s3-secret-key}}
+    endpoint: {{opensuse-cf-stacks-s3-endpoint}}
+- name: opensuse-cf-stacks-receipt-s3
+  type: s3
+  source:
+    bucket: {{opensuse-cf-stacks-s3-bucket}}
+    regexp: rootfs/opensuse-cf-stack_receipt-(.*)
+    access_key_id: {{opensuse-cf-stacks-s3-access-key}}
+    secret_access_key: {{opensuse-cf-stacks-s3-secret-key}}
+    endpoint: {{opensuse-cf-stacks-s3-endpoint}}
+
+# Docker Images:
+- name: opensuse-base-image
+  type: docker-image
+  source:
+    repository: opensuse
+- name: opensuse-cf-stacks-latest-image
+  type: docker-image
+  source:
+    repository: alexjh/opensuse-cf-stack
+    username: {{opensuse-cf-stacks-docker-username}}
+    password: {{opensuse-cf-stacks-docker-password}}
+    email: example@example.com
+
+# Versions:
+
+- name: version
+  type: semver
+  source:
+    bucket: {{opensuse-cf-stacks-s3-bucket}}
+    key: versions/stack
+    access_key_id: {{opensuse-cf-stacks-s3-access-key}}
+    secret_access_key: {{opensuse-cf-stacks-s3-secret-key}}
+    endpoint: {{opensuse-cf-stacks-s3-endpoint}}
+
+- name: opensuse-cf-stack-rootfs-release-version
+  type: semver
+  source:
+    bucket: {{opensuse-cf-stacks-s3-bucket}}
+    initial_version: 0.1.0-rc.1
+    key: versions/opensuse-cf-stack-rootfs-release
+    access_key_id: {{opensuse-cf-stacks-s3-access-key}}
+    secret_access_key: {{opensuse-cf-stacks-s3-secret-key}}
+    endpoint: {{opensuse-cf-stacks-s3-endpoint}}
+
+jobs:
+- name: build-rootfs
+  serial: true
+  plan:
+  - aggregate:
+    - get: opensuse-cf-stacks-ci
+    - get: opensuse-cf-stacks
+    - get: opensuse-base-image
+    - get: version
+      params: {pre: rc}
+    - get: opensuse-cf-stack-rootfs-release-version
+      params: {pre: rc}
+  - do:
+    - put: opensuse-cf-stacks-latest-image
+      params:
+        build: opensuse-cf-stacks
+        get_params:
+          rootfs: true
+    - task: create-rpm-list
+      image: opensuse-cf-stacks-latest-image
+      file: opensuse-cf-stacks-ci/tasks/create-rpm-list/task.yaml
+    - task: create-stack-receipt
+      file: opensuse-cf-stacks-ci/tasks/create-stack-receipt/task.yaml
+    - put: opensuse-cf-stacks-receipt-s3
+      params:
+        file: stacks-artifacts/opensuse-cf-stack_receipt-*
+    - put: version
+      params: {file: version/number}
+    - put: opensuse-cf-stack-rootfs-release-version
+      params: {file: opensuse-cf-stack-rootfs-release-version/number}
+    - put: opensuse-cf-stacks-s3
+      params:
+        file: opensuse-cf-stacks-latest-image/rootfs.tar

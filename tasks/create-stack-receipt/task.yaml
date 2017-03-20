@@ -1,0 +1,11 @@
+---
+platform: linux
+
+inputs:
+- name: openstack-cf-stacks-ci
+
+outputs:
+- name: stack-artifacts
+
+run:
+  path: openstack-cf-stacks-ci/tasks/create-stack-receipt/task.sh
