@@ -1,0 +1,19 @@
+---
+platform: linux
+
+image_resource:
+  type: docker-image
+  source:
+    repository: opensuse
+
+inputs:
+- name: opensuse-cf-stacks-ci
+- name: opensuse-cf-stacks-latest-image
+- name: version
+- name: stack-artifacts
+
+outputs:
+- name: stack-artifacts
+
+run:
+  path: opensuse-cf-stacks-ci/tasks/create-versioned-rootfs/task.sh

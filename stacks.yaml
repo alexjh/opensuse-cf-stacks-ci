@@ -84,6 +84,8 @@ jobs:
     - task: create-rpm-list
       image: opensuse-cf-stacks-latest-image
       file: opensuse-cf-stacks-ci/tasks/create-rpm-list/task.yaml
+    - task: create-versioned-rootfs
+      file: opensuse-cf-stacks-ci/tasks/create-versioned-rootfs/task.yaml
     - task: create-stack-receipt
       file: opensuse-cf-stacks-ci/tasks/create-stack-receipt/task.yaml
     - put: opensuse-cf-stacks-receipt-s3
@@ -95,4 +97,4 @@ jobs:
       params: {file: opensuse-cf-stack-rootfs-release-version/number}
     - put: opensuse-cf-stacks-s3
       params:
-        file: opensuse-cf-stacks-latest-image/rootfs.tar
+        file: stack-artifacts/opensuse-cf-stack-*.tar.gz
