@@ -10,6 +10,7 @@ resources:
   type: git
   source:
     uri: https://github.com/jandubois/stacks
+    branch: opensusefs2
 
 # S3 Buckets:
 - name: opensuse-cf-stacks-s3
