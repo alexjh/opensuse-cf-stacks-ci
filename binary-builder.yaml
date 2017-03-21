@@ -26,7 +26,7 @@ resources:
   type: s3
   source:
     bucket: {{opensuse-cf-buildpack-dependencies-s3-bucket}}
-    regexp: dependencies/*.tgz
+    regexp: dependencies/(.*).tgz
     access_key_id: {{opensuse-cf-stacks-s3-access-key}}
     secret_access_key: {{opensuse-cf-stacks-s3-secret-key}}
     endpoint: {{opensuse-cf-stacks-s3-endpoint}}
