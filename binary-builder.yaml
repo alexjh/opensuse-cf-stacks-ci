@@ -38,6 +38,7 @@ jobs:
     - get: opensuse-cf-binary-builder
     - get: opensuse-cf-stacks-ci
     - get: opensuse-cf-fs2
+    - get: opensuse-cf-stacks-latest-image
   - do:
     - task: build-binary
       image: opensuse-cf-stacks-latest-image
