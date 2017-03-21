@@ -50,3 +50,39 @@ jobs:
     - put: opensuse-cf-buildpack-dependencies-s3
       params:
         file: build-binary/*.tgz
+- name: build-bundler
+  plan:
+  - aggregate:
+    - get: opensuse-cf-binary-builder
+    - get: opensuse-cf-stacks-ci
+    - get: opensuse-cf-fs2
+    - get: opensuse-cf-stacks-latest-image
+  - do:
+    - task: build-binary
+      image: opensuse-cf-stacks-latest-image
+      file: opensuse-cf-stacks-ci/tasks/build-binary/task.yaml
+      params:
+        NAME: bundler
+        VERSION: 1.14.6 
+        SHA256: f431206d5e89e803b7cf0dd232683eaec769ec168707e9b3d8297dba35137d40
+    - put: opensuse-cf-buildpack-dependencies-s3
+      params:
+        file: build-binary/*.tgz
+- name: build-ruby
+  plan:
+  - aggregate:
+    - get: opensuse-cf-binary-builder
+    - get: opensuse-cf-stacks-ci
+    - get: opensuse-cf-fs2
+    - get: opensuse-cf-stacks-latest-image
+  - do:
+    - task: build-binary
+      image: opensuse-cf-stacks-latest-image
+      file: opensuse-cf-stacks-ci/tasks/build-binary/task.yaml
+      params:
+        NAME: ruby
+        VERSION: 2.4.0 
+        SHA256: 152fd0bd15a90b4a18213448f485d4b53e9f7662e1508190aa5b702446b29e3d
+    - put: opensuse-cf-buildpack-dependencies-s3
+      params:
+        file: build-binary/*.tgz
