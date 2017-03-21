@@ -9,7 +9,7 @@ resources:
 - name: opensuse-cf-stacks
   type: git
   source:
-    uri: {{opensuse-cf-stacks-git-url}}
+    uri: https://github.com/jandubois/stacks
 
 # S3 Buckets:
 - name: opensuse-cf-stacks-s3
@@ -78,7 +78,7 @@ jobs:
   - do:
     - put: opensuse-cf-stacks-latest-image
       params:
-        build: opensuse-cf-stacks
+        build: opensuse-cf-stacks/cflinuxfs2
       get_params:
         rootfs: true
     - task: create-rpm-list
