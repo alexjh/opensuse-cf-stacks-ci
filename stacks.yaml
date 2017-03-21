@@ -58,7 +58,6 @@ resources:
   type: semver
   source:
     bucket: {{opensuse-cf-stacks-s3-bucket}}
-    initial_version: 0.1.0-rc.1
     key: versions/opensuse-cf-stack-rootfs-release
     access_key_id: {{opensuse-cf-stacks-s3-access-key}}
     secret_access_key: {{opensuse-cf-stacks-s3-secret-key}}
