@@ -1,0 +1,51 @@
+---
+resources:
+
+# Git Repos:
+- name: opensuse-cf-stacks-ci
+  type: git
+  source:
+    uri: {{opensuse-cf-stacks-ci-git-url}}
+- name: opensuse-cf-binary-builder
+  type: git
+  source:
+    uri: {{opensuse-cf-binary-builder-git-url}}
+- name: opensuse-cf-fs2
+  type: git
+  source:
+    uri: {{opensuse-cf-fs2-git-url}}
+
+# Docker Images:
+- name: opensuse-cf-stacks-latest-image
+  type: docker-image
+  source:
+    repository: alexjh/opensuse-cf-stack
+
+# S3 Buckets:
+- name: opensuse-cf-buildpack-dependencies-s3
+  type: s3
+  source:
+    bucket: {{opensuse-cf-buildpack-dependencies-s3-bucket}}
+    regexp: dependencies/*.tar.gz
+    access_key_id: {{opensuse-cf-stacks-s3-access-key}}
+    secret_access_key: {{opensuse-cf-stacks-s3-secret-key}}
+    endpoint: {{opensuse-cf-stacks-s3-endpoint}}
+
+jobs:
+- name: build-node
+  plan:
+  - aggregate:
+    - get: opensuse-cf-binary-builder
+    - get: opensuse-cf-stacks-ci
+    - get: opensuse-cf-fs2
+  - do:
+    - task: build-binary
+      image: opensuse-cf-stacks-latest-image
+      file: opensuse-cf-stacks-ci/tasks/build-binary/task.yaml
+      params:
+        NAME: node
+        VERSION: 7.7.3
+        SHA256: 81edeed9e3daa34a8962339357e2b9c5f7d9248e025ec872b6a55a519d3589b9
+    - put: opensuse-cf-buildpack-dependencies-s3
+      params:
+        file: build-binary/*.tar.gz
