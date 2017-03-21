@@ -26,7 +26,7 @@ resources:
   type: s3
   source:
     bucket: {{opensuse-cf-buildpack-dependencies-s3-bucket}}
-    regexp: dependencies/*.tar.gz
+    regexp: dependencies/*.tgz
     access_key_id: {{opensuse-cf-stacks-s3-access-key}}
     secret_access_key: {{opensuse-cf-stacks-s3-secret-key}}
     endpoint: {{opensuse-cf-stacks-s3-endpoint}}
@@ -49,4 +49,4 @@ jobs:
         SHA256: 81edeed9e3daa34a8962339357e2b9c5f7d9248e025ec872b6a55a519d3589b9
     - put: opensuse-cf-buildpack-dependencies-s3
       params:
-        file: build-binary/*.tar.gz
+        file: build-binary/*.tgz
