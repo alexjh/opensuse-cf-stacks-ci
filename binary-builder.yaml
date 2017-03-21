@@ -86,3 +86,21 @@ jobs:
     - put: opensuse-cf-buildpack-dependencies-s3
       params:
         file: build-binary/*.tgz
+- name: build-yarn
+  plan:
+  - aggregate:
+    - get: opensuse-cf-binary-builder
+    - get: opensuse-cf-stacks-ci
+    - get: opensuse-cf-fs2
+    - get: opensuse-cf-stacks-latest-image
+  - do:
+    - task: build-binary
+      image: opensuse-cf-stacks-latest-image
+      file: opensuse-cf-stacks-ci/tasks/build-binary/task.yaml
+      params:
+        NAME: yarn
+        VERSION: 0.22.0
+        SHA256: e295042279b644f2bc3ea3407a2b2fb417a200d35590b0ec535422d21cf19a09
+    - put: opensuse-cf-buildpack-dependencies-s3
+      params:
+        file: build-binary/*.tgz
