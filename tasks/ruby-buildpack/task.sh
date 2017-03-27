@@ -1,5 +1,8 @@
 #!/bin/sh
 
+# TODO Use the bundler built from `binary-builder`?
+gem install bundler
+
 export BUNDLE_GEMFILE=cf.Gemfile
 if [ ! -z "$RUBYGEM_MIRROR" ]; then
   bundle config mirror.https://rubygems.org "${RUBYGEM_MIRROR}"
