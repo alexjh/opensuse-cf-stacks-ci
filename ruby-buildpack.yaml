@@ -26,6 +26,14 @@ resources:
     access_key_id: {{opensuse-cf-stacks-s3-access-key}}
     secret_access_key: {{opensuse-cf-stacks-s3-secret-key}}
     endpoint: {{opensuse-cf-stacks-s3-endpoint}}
+- name: opensuse-cf-buildpacks-cached-s3
+  type: s3
+  source:
+    bucket: {{opensuse-cf-buildpacks-s3-bucket}}
+    regexp: buildpacks-cached/(.*).zip
+    access_key_id: {{opensuse-cf-stacks-s3-access-key}}
+    secret_access_key: {{opensuse-cf-stacks-s3-secret-key}}
+    endpoint: {{opensuse-cf-stacks-s3-endpoint}}
 
 jobs:
 - name: create-buildpack
@@ -40,4 +48,7 @@ jobs:
       file: opensuse-cf-stacks-ci/tasks/ruby-buildpack/task.yaml
     - put: opensuse-cf-buildpacks-s3
       params:
-        file: buildpack/*.zip
+        file: buildpack/*_buildpack-v*.zip
+    - put: opensuse-cf-buildpacks-cached-s3
+      params:
+        file: buildpack/*_buildpack-cached-v*.zip
