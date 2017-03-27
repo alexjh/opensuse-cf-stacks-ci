@@ -12,4 +12,5 @@ fi
 bundle install
 bundle exec buildpack-packager --uncached
 bundle exec buildpack-packager --cached
-
+mkdir -p ../buildpack
+mv *.zip ../buildpack
