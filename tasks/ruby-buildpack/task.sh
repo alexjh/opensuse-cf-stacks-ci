@@ -1,5 +1,7 @@
 #!/bin/sh
 
+cd opensuse-cf-ruby-buildpack
+
 # TODO Use the bundler built from `binary-builder`?
 gem install bundler
 
