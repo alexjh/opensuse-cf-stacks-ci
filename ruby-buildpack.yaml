@@ -1,0 +1,43 @@
+---
+resources:
+
+# Git Repos:
+- name: opensuse-cf-stacks-ci
+  type: git
+  source:
+    uri: {{opensuse-cf-stacks-ci-git-url}}
+- name: opensuse-cf-ruby-buildpack
+  type: git
+  source:
+    uri: {{opensuse-cf-ruby-buildpack-git-url}}
+
+# Docker Images:
+- name: opensuse-cf-stacks-latest-image
+  type: docker-image
+  source:
+    repository: alexjh/opensuse-cf-stack
+
+# S3 Buckets:
+- name: opensuse-cf-buildpacks-s3
+  type: s3
+  source:
+    bucket: {{opensuse-cf-buildpacks-s3-bucket}}
+    regexp: buildpacks/(.*).zip
+    access_key_id: {{opensuse-cf-stacks-s3-access-key}}
+    secret_access_key: {{opensuse-cf-stacks-s3-secret-key}}
+    endpoint: {{opensuse-cf-stacks-s3-endpoint}}
+
+jobs:
+- name: create-buildpack
+  plan:
+  - aggregate:
+    - get: opensuse-cf-ruby-buildpack
+    - get: opensuse-cf-stacks-ci
+    - get: opensuse-cf-stacks-latest-image
+  - do:
+    - task: build-binary
+      image: opensuse-cf-stacks-latest-image
+      file: opensuse-cf-stacks-ci/tasks/ruby-buildpack/task.yaml
+    - put: opensuse-cf-buildpacks-s3
+      params:
+        file: buildpack/*.zip

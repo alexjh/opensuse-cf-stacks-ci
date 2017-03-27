@@ -1,0 +1,17 @@
+---
+platform: linux
+
+image_resource:
+  type: docker-image
+  source:
+    repository: opensuse
+
+inputs:
+- name: opensuse-cf-stacks-ci
+- name: opensuse-cf-stacks-latest-image
+
+outputs:
+- name: buildpack
+
+run:
+  path: opensuse-cf-stacks-ci/tasks/ruby-buildpack/task.sh
